@@ -35,18 +35,6 @@ autocmd({"BufWritePre"}, {
     command = [[%s/\s\+$//e]],
 })
 
-autocmd('BufEnter', {
-    group = PersonalConfigGroup,
-    callback = function()
-        if vim.bo.filetype == "zig" then
-            vim.cmd.colorscheme("tokyonight-night")
-        else
-            vim.cmd.colorscheme("rose-pine-moon")
-        end
-    end
-})
-
-
 autocmd('LspAttach', {
     group = PersonalConfigGroup,
 
@@ -63,6 +51,14 @@ autocmd('LspAttach', {
         vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
         vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
     end
+})
+
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function()
+    vim.cmd.highlight("StatusLine guibg=NONE ctermbg=NONE")
+    vim.cmd.highlight("StatusLineNC guibg=NONE ctermbg=NONE")
+  end,
+  once = true,  -- Only run once on startup
 })
 
 vim.g.netrw_browse_split = 0
