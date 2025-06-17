@@ -1,26 +1,27 @@
 function ColorMyPencils(color)
-	color = color or "rose-pine-moon"
+	color = color or "tokyonight" -- "rose-pine-moon"
 	vim.cmd.colorscheme(color)
 
 	vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+    -- vim.api.nvim_set_hl(0, "Visual", { bg = "#fcba03", fg = "#000000" })
+    vim.cmd.highlight("StatusLine guibg=NONE ctermbg=NONE")
+    vim.cmd.highlight("StatusLineNC guibg=NONE ctermbg=NONE")
 end
 
 return {
-
     {
-        "erikbackman/brightburn.vim",
-    },
-
-    {
-        "folke/tokyonight.nvim",
-        lazy = false,
-        opts = {},
+        "catppuccin/nvim",
+        name = "catppuccin",
+        priority = 1000,
         config = function()
             ColorMyPencils()
         end
     },
     {
+        "erikbackman/brightburn.vim",
+    },
+   {
         "ellisonleao/gruvbox.nvim",
         name = "gruvbox",
         config = function()
@@ -71,7 +72,6 @@ return {
             })
         end
     },
-
     {
         "rose-pine/neovim",
         name = "rose-pine",
@@ -86,6 +86,4 @@ return {
             ColorMyPencils();
         end
     },
-
-
 }
