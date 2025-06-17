@@ -28,6 +28,7 @@ require("lazy").setup({
     { import = "plugins" },
   },
   -- Configure any other settings here. See the documentation for more details.
+--vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
   -- colorscheme that will be used when installing plugins.
   install = { colorscheme = { "habamax" } },
   -- automatically check for plugin updates
