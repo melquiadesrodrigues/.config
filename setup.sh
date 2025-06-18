@@ -85,6 +85,15 @@ install_p10k() {
     fi
 }
 
+install_tmux_tpm() {
+    if [[ ! -d "$HOME/.tmux/plugins/tpm" ]]; then
+        echo "Installing tmux tpm plugin..."
+        git clone "https://github.com/tmux-plugins/tpm" "$HOME/.tmux/plugins/tpm"
+    else
+        echo "Tmux tpm plugin is already installed."
+    fi
+}
+
 install_neovim() {
     if ! command -v nvim &>/dev/null; then
         echo "Installing neovim..."
@@ -128,6 +137,7 @@ main() {
     install_package zsh
     install_package ripgrep
     install_package tmux
+    install_tmux_tpm
     install_oh_my_zsh
     install_oh_my_zsh_plugin "zsh-autosuggestions" "zsh-users/zsh-autosuggestions"
     install_oh_my_zsh_plugin "zsh-syntax-highlighting" "zsh-users/zsh-syntax-highlighting"
