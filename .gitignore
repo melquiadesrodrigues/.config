@@ -5,3 +5,5 @@
 !nvim/
 !tmux/
 !dotfiles/
+
+tmux/plugins/
