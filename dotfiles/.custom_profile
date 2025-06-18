@@ -1,0 +1,14 @@
+# paths
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
+
+# alias
+alias k=kubectl
+alias h=helm
+alias kx=kubectx
+alias pip=pip3
+alias python=python3
+alias vim=nvim
+#alias npm="pnpm"
+#alias npx="pnpx"
+

@@ -4,4 +4,4 @@
 # Allow specific folders
 !nvim/
 !tmux/
-
+!dotfiles/
