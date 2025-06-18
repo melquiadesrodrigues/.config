@@ -1,1 +1,7 @@
-lazy-lock.json
+# Ignore all folders everything
+/*/
+
+# Allow specific folders
+!nvim/
+!tmux/
+
