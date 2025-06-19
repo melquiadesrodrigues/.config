@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+selected_session_name="default"
+tmux_running=$(pgrep tmux)
+
+# Case 1: Not inside tmux and tmux isn't running — start a new session
+if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
+    if ! tmux has-session -t=$selected_session_name 2>/dev/null; then
+        echo "Starting new tmux session: $selected_session_name"
+        exec tmux new-session -s $selected_session_name
+    else
+        echo "Attaching to existing tmux session: $selected_session_name"
+        exec tmux attach -t $selected_session_name
+    fi
+fi
+
+# Case 2: Already inside tmux — don't switch if already in the session
+if [[ -n $TMUX ]]; then
+    current_session=$(tmux display-message -p '#S')
+    if [[ "$current_session" == "$selected_session_name" ]]; then
+        echo "Already in target session: $selected_session_name"
+        exit 0
+    fi
+fi
+
+# Ensure the session exists
+if ! tmux has-session -t=$selected_session_name 2>/dev/null; then
+    echo "Creating detached session: $selected_session_name"
+    tmux new-session -ds $selected_session_name -n "editor"
+fi
+
+# Switch only if inside tmux and not already in target session
+if [[ -n $TMUX ]]; then
+    echo "Switching to tmux session: $selected_session_name"
+    tmux switch-client -t $selected_session_name
+else
+    echo "Attaching to existing tmux session: $selected_session_name"
+    tmux attach -t $selected_session_name
+fi
+

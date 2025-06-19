@@ -48,6 +48,17 @@ backup_and_copy() {
     cp "$src" "$dest"
 }
 
+init_from_tpl() {
+    local tpl=$1
+    local dest="$HOME/$(basename "$tpl" )"
+    if [[ ! -e "$dest" ]]; then
+        echo "Creating $dest"
+        cp "$tpl.tpl" "$dest"
+    else
+        echo "$dest already exists"
+    fi
+}
+
 apply_custom_profile() {
     local dotfiles_dir=$1
     sed -i "" "/.custom_profile/d" ~/.zprofile > /dev/null 2>&1
@@ -123,6 +134,24 @@ install_custom_scripts() {
     fi
 }
 
+install_eza() {
+    if ! command -v eza &>/dev/null; then
+       echo "Instaling eza..."
+        if is_linux; then
+            install_package gpg
+            sudo mkdir -p /etc/apt/keyrings
+            wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
+            echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
+            sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
+            sudo apt update
+        fi
+        install_package eza
+    else
+        echo "Eza is already installed."
+    fi
+}
+
+
 main() {
     # Assume dotfiles are in a folder named 'dotfiles' in current directory
     DOTFILES_DIR="dotfiles"
@@ -132,6 +161,7 @@ main() {
     apply_custom_profile "$DOTFILES_DIR"
     backup_and_copy "$DOTFILES_DIR/.p10k.zsh"
     backup_and_copy "$DOTFILES_DIR/.zshrc"
+    init_from_tpl "$DOTFILES_DIR/.tmux-sessions.sh"
 
     install_package git
     install_package zsh
@@ -144,6 +174,7 @@ main() {
     install_p10k
     install_neovim
     install_custom_scripts
+    install_eza
 }
 
 main "$@"

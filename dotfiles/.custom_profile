@@ -12,3 +12,24 @@ alias vim=nvim
 #alias npm="pnpm"
 #alias npx="pnpx"
 
+# eza aliases if available
+if command -v eza >/dev/null 2>&1; then
+  alias l="eza --icons=auto"
+  alias ls="eza --icons=auto"
+  alias ll="eza -lg --icons=auto"
+  alias la='eza --icons=auto --group --header --group-directories-first --long --all'
+  alias lt="eza -lTg --icons=auto"
+  alias lt2="eza -lTg --level=2 --icons=auto"
+  alias lt3="eza -lTg --level=3 --icons=auto"
+  alias lta="eza -lTag --icons=auto"
+  alias lta2="eza -lTag --level=2 --icons=auto"
+  alias lta3="eza -lTag --level=3 --icons=auto"
+
+  function eza() {
+    if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+      command eza --git --classify "$@"
+    else
+      command eza --classify "$@"
+    fi
+  }
+fi
