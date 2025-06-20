@@ -17,7 +17,7 @@ install_package() {
             echo "Installing Homebrew..."
             /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         fi
-        if command -v $package &>/dev/null || brew list "$package" &>/dev/null; then
+        if command -v "$package" &>/dev/null || brew list "$package" &>/dev/null; then
             echo "$package package is already installed"
         else
             echo "Installing $package..."
@@ -25,7 +25,7 @@ install_package() {
         fi
     elif is_linux; then
         sudo apt-get update -y
-        if command -v $package &>/dev/null || dpkg -s "$package" &>/dev/null; then
+        if command -v "$package" &>/dev/null || dpkg -s "$package" &>/dev/null; then
             echo "$package package is already installed"
         else
             echo "Installing $package..."
@@ -39,7 +39,7 @@ install_package() {
 
 backup_and_copy() {
     local src=$1
-    local dest="$HOME/$(basename "$src")"
+    dest="$HOME/$(basename "$src")"
     if [[ -e "$dest" && ! -e "$dest.bak" ]]; then
         echo "Backing up $dest to $dest.bak"
         mv "$dest" "$dest.bak"
@@ -50,7 +50,7 @@ backup_and_copy() {
 
 init_from_tpl() {
     local tpl=$1
-    local dest="$HOME/$(basename "$tpl" )"
+    dest="$HOME/$(basename "$tpl" )"
     if [[ ! -e "$dest" ]]; then
         echo "Creating $dest"
         cp "$tpl.tpl" "$dest"
@@ -61,7 +61,11 @@ init_from_tpl() {
 
 apply_custom_profile() {
     local dotfiles_dir=$1
-    sed -i "" "/.custom_profile/d" ~/.zprofile > /dev/null 2>&1
+    if is_macos; then
+        sed -i "" "/.custom_profile/d" ~/.zprofile > /dev/null 2>&1
+    else
+        sed -i "/.custom_profile/d" ~/.zprofile > /dev/null 2>&1
+    fi
     echo "source $(pwd)/$dotfiles_dir/.custom_profile" | tee -a ~/.zprofile > /dev/null 2>&1
 }
 
@@ -114,7 +118,7 @@ install_neovim() {
             curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
             sudo rm -rf /opt/nvim
             sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
-            echo "export PATH=\"\$PATH:/opt/nvim-linux-x86_64/bin\"" >> "$HOME/.zshrc"
+            echo "export PATH=\"\$PATH:/opt/nvim-linux-x86_64/bin\"" >> "$HOME/.zprofile"
         fi
     else
         echo "Neovim is already installed."
@@ -156,7 +160,7 @@ main() {
     # Assume dotfiles are in a folder named 'dotfiles' in current directory
     DOTFILES_DIR="dotfiles"
 
-    cd $( cd "$(dirname "$0")" ; pwd -P )
+    cd "$( cd "$(dirname "$0")" ; pwd -P )"
 
     apply_custom_profile "$DOTFILES_DIR"
     backup_and_copy "$DOTFILES_DIR/.p10k.zsh"
