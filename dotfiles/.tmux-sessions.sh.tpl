@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
 selected_session_name="default"
 tmux_running=$(pgrep tmux)

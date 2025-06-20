@@ -119,6 +119,7 @@ install_neovim() {
             sudo rm -rf /opt/nvim
             sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
             echo "export PATH=\"\$PATH:/opt/nvim-linux-x86_64/bin\"" >> "$HOME/.zprofile"
+            rm -rf nvim-linux-x86_64.tar.gz
         fi
     else
         echo "Neovim is already installed."
