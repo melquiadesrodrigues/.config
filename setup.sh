@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
+trap 'echo "Error on line $LINENO"' ERR
 
 is_macos() {
     [[ "$(uname)" == "Darwin" ]]
@@ -50,10 +51,10 @@ backup_and_copy() {
 
 init_from_tpl() {
     local tpl=$1
-    dest="$HOME/$(basename "$tpl" )"
+    dest="$HOME/$(basename "$tpl")"
     if [[ ! -e "$dest" ]]; then
         echo "Creating $dest"
-        cp "$tpl.tpl" "$dest"
+        cp "${tpl}.tpl" "$dest"
     else
         echo "$dest already exists"
     fi
@@ -141,7 +142,7 @@ install_custom_scripts() {
 
 install_eza() {
     if ! command -v eza &>/dev/null; then
-       echo "Instaling eza..."
+       echo "Installing eza..."
         if is_linux; then
             install_package gpg
             sudo mkdir -p /etc/apt/keyrings
@@ -153,6 +154,25 @@ install_eza() {
         install_package eza
     else
         echo "Eza is already installed."
+    fi
+}
+
+install_go() {
+    if ! command -v go &>/dev/null; then
+        echo "Installing Go..."
+        if is_macos; then
+            brew install go
+        else
+            local go_version="1.25.4"
+            local go_tar="go${go_version}.linux-amd64.tar.gz"
+            curl -LO "https://go.dev/dl/${go_tar}"
+            sudo rm -rf /usr/local/go
+            sudo tar -C /usr/local -xzf "$go_tar"
+            echo 'export PATH="$PATH:/usr/local/go/bin"' >> "$HOME/.zprofile"
+            rm -rf "$go_tar"
+        fi
+    else
+        echo "Go is already installed."
     fi
 }
 
@@ -172,6 +192,9 @@ main() {
     install_package zsh
     install_package ripgrep
     install_package tmux
+    install_package build-essential
+    install_package clang
+    install_package luarocks
     install_tmux_tpm
     install_oh_my_zsh
     install_oh_my_zsh_plugin "zsh-autosuggestions" "zsh-users/zsh-autosuggestions"
@@ -180,6 +203,7 @@ main() {
     install_neovim
     install_custom_scripts
     install_eza
+    install_go
 }
 
 main "$@"

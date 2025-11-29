@@ -1,4 +1,8 @@
-zsh ~/.tmux-sessions.sh
+if [[ $TERM_PROGRAM != "WarpTerminal" ]]; then
+    zsh ~/.tmux-sessions.sh
+else
+    alias t="zsh ~/.tmux-sessions.sh"
+fi
 
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
