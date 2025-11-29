@@ -11,6 +11,7 @@ fi
 alias reload-zsh="source ~/.zshrc"
 alias edit-zsh="nvim ~/.zshrc"
 
+export KUBECONFIG=$(find ~/.kube -maxdepth 1 -type f | tr '\n': ':')
 export ZSH="$HOME/.oh-my-zsh"
 
 ZSH_THEME="powerlevel10k/powerlevel10k"
