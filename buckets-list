@@ -1,0 +1,17 @@
+backuptableau
+ecs-chatbot-default-hml
+ecs-chatbot-default-prd
+ecs-chatbot-dev
+ecs-chatbot-models-dev
+ecs-chatbot-models-hml
+ecs-chatbot-models-prd
+ecs-chatbot-mvp-data-source-dev
+ecs-chatbot-trasancional-compass-hml
+ecs-dataops-analytics-adjust-prd
+ecs-dataops-databricks-sensitive-prd
+ecs-dataops-personalization-hub-dev
+ecs-dataops-personalization-hub-hml
+ecs-dataops-personalization-hub-prd
+ecs-dataops-tableau-server-prd
+ecs-events-dataops-prd
+s3-ecs-crm-sf-mktcloud-ens-prd
